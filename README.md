@@ -1,8 +1,8 @@
-# Astrobiology: HSV-1 Latency and Icy Moon Survival
+# Astrobiology
 
-This repository contains bioinformatics analyses exploring how life might survive in extreme environments.
+Bioinformatics analyses exploring how life might survive in extreme environments.
 
-## Project 1: Rhodotorula frigidalcoholis Under Icy Moon Conditions
+## Rhodotorula frigidalcoholis Under Icy Moon Conditions
 
 **Question:** How does this yeast survive simulated icy moon conditions (desiccation, radiation, UV)?
 
@@ -18,11 +18,6 @@ This repository contains bioinformatics analyses exploring how life might surviv
 **Key Finding:** The yeast shuts down an F-box protein (part of the protein recycling system) during stress, conserving energy for survival.
 
 **Next Steps:** Investigate the most highly upregulated genes (RHOSPRAFT_27191, RHOSPRAFT_32292, RHOSPRAFT_14850) to understand the active survival response.
-
-## Files
-- `volcano_fixed.py`  Script to generate the volcano plot
-- `volcano_plot.png`  Output figure
-- `simple_volcano.py`  Initial exploratory script
 
 ## Skills Used
 Python (pandas, matplotlib, seaborn), BLAST, EnsemblFungi, NCBI, sequence translation, functional annotation
