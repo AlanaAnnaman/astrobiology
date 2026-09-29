@@ -1,0 +1,25 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+data = {}
+
+plt.figure(figsize=(15, 8))
+bar_width = 0.15
+doses = data["Dose"]
+x = np.arange(len(doses))
+
+conditions = ["pre-desiccation", "pre-desiccation (fridge)", "post-desiccation", "desiccation and X-ray only", "desiccation and UV only", "all conditions"]
+colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd"]
+
+for i, condition in enumerate(conditions):
+	values = data[condition]
+	errors = data[condition + "_std"]
+	plt.bar(x + i * bar_width, values, width=bar_width, color=colors[i], label=condition, capsize=5, yerr=errors, error_kws{"elinewidth": 1.5})
+
+plt.yscale("log")
+plt.ylabel("Relative Survival (N/N$_{0}$)", fontsize=12)
+plt.xticks(x + bar_width * 2, doses, rotation=45, ha="right")
+plt.tick_params(axis="both", which="major", labelsize=10)
+pl.grid(True, axis="y", linestyle="--", alpha=0.7)
+plt.tight_layout()

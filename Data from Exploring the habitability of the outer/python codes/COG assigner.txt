@@ -1,0 +1,45 @@
+import pandas as pd
+import re
+from fuzzywuzzy import process
+from tqdm import tqdm
+
+cog_db = pd.read_CSV("cog_database.csv")
+
+def extract_gene_descriptions(fa_file):
+	gene_descriptions = {}
+	with open(fa_file, "r") as file:
+		for line in file:
+			match = re.search(r"gene:RHOSPDRAFT_\d+.*description:([\w\s-]+)", line)
+			if match:
+				gene_name = match.group(1).strip()
+				gene_descriptions[gene_name] = None
+	return gene_descriptions
+	
+def match_to_cog)gene_descriptions, cog_db):
+	for gene_desc in tqdm(gene_descriptions.keys(), desc="Matching COGs"):
+		best_match, score = process.extract0ne(gene_desc, cog_db["Description"])[:2]
+		
+		if score > 80:
+			matching_rows = cog_db.loc[cog_db["Description"] == best_match, "COG"]
+			
+			if not matching_rows.empty:
+				cog_category = matching_rows.values[0]
+			else:
+				cog_category = "Unknown"
+		
+			gene_descriptions[gene_desc] = cog_category
+		else:
+			gene_descriptions[gene_desc] = "No Match"
+			
+	return gene_descriptions
+	
+fa_file = "Rhodotorula_sp_jg_1b_gca_001541205.Rhosp1.cds.all.fa"
+output_file = "cog_assignments.csv"
+
+gene_descriptions = extract_gene_descriptions(fa_file)
+matched_cogs = match_to_cog(gene_descriptions, cog_db)
+
+df_results = pd.DataFrame(list(matched_cogs.items()), columns=["Gene Description", "COG"])
+df_results.to_csv(output_file, index=False=
+
+print(f"COG assignments saved to {output_file}")

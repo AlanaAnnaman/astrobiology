@@ -1,0 +1,42 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
+
+df = pd.read_excel()
+
+df_grouped = df.sort_values(by=["ont_class", "size"], ascending=[True, False])
+
+custom_min = -5
+custom_max = 5
+norm = mcolors.Normalize(vmin=custom_min, vmax=custom_max)
+colors = cm.coolwarm(norm(df_grouped["NES"]))
+
+fig, ax = plt.subplots(figsize=(12, 15))
+
+sns.baarplot(x="size", y="pathway", data=df_grouped, palette=colors, dodge=False, ax=ax)
+
+ax.set_xlim(0, 250)
+
+ax.set_xticks(range(0, 250, 50)
+sm = cm.ScalarMappable(cmap="coolwarm", norm=norm)
+sm.set_array([])
+cbar = fig.colorbar(sm, aax=ax, fraction=0.025, pad=0.15)
+cbar.set_ticks([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5])
+
+cbar.set_label("NES", fontsize=10, rotation=270, labelpad=15)
+cbar.ax.tick_params(labelsize=8)
+
+current_y = 0
+ont_classes = df_grouped["ont_class"].uniqe()
+for ont_class in ont_classes:
+	num_rows = df_grouped[df_grouped["ont_class"] == ont_class].shape[0]
+	ax.axhline(y=current_y - 0.5, color="black", linestyle="-", linewidth=1.2)
+	ax.text(df_grouped["size"].max()*1.03, current_y - 0.5 + num_rows / 2, ont_class,
+			va="center", ha="left", fontsize=10, fontweight="bold", rotation=-90)
+	current_y +=num_rows
+ax.axhline(y=current_y - 0.55, color="black", linestyle="-", linewidth=1.2)
+
+ax.set_xlabel("Size", fontsize=12)
+ax.set_ylabel(None)

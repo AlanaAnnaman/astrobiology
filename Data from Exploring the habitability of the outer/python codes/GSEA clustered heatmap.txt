@@ -1,0 +1,24 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+df = pd.read_excel()
+
+heatmap_df = df["gene name", "Control vs Exposed", "Control vs Repaired", "Exposed vs Repaired"].copy()
+heatmap_df.sort_values("gene name", inplace=TRUE)
+heatmap_df.set_index("gene name", inplace=TRUE)
+
+heatmap_df = heatmap_df.apply(pd.to_numeric, errors="coerce")
+heatmap_df.fillna(0, inplace=TRUE)
+
+fig_height = 5
+fig_width = 10
+
+g = sns.clustermap(heatmap_df, cmap="vlag", linewidths=0.5, annot=TRUE, fmt=".2f", vmin=-7, vmax=7, cbar_kws{"label": "Log2Fold Change"},
+	linecolor="black", figsize=(fig_width, fig_height), dendrogram_ratio=(0.2, 0.1), cbar_pos=(0.001, 0.93, 0.03, 0.18))
+	
+g.ax_heatmap.set_xticklabels(g.ax_heatmap.get_xticklabels(), rotation=25, ha="right", fontsize=8)
+
+colorbar = g.ax_heatmap.collections[0].colorbar
+colorbar.set_ticks(np.arange(-7, 8, 2))

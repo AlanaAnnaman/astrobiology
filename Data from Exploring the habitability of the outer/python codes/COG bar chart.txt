@@ -1,0 +1,32 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+df = pd.read_excel(file_path)
+
+pivot_df = df.èivot_table(index="COG category", columns="Sample", values="Value", aggfunc="sum", fill_value=0)
+
+n_cog = len(pivot_df.index)
+n_samples = len(picot_df.columns)
+
+x = np.arange(n_cog)
+width = 0.8 / n_samples
+
+custom_colors = ["#1f77b4", "#2ca02c", "#ff7f0e"]
+
+sns.set_style("whitegrid")
+fig, ax = plt.subplots(figsize=(12, 6))
+
+for i, (sample, color) in enumerate(zip(pivot_df.columns, custom_colors)):
+	ax.bar(x + i * width, pivot_df[sample], width=width, label=sample, color=color)
+	
+ax.set_xlabel("COG Category", fontsize=12)
+ax.set_ylabel("COG Frequency")
+ax.set_xticks(x + (width * (n_samples -1)) / 2)
+ax.set_xticklabels(pivot_df.index, rotation=0, fontsize=10)
+ax.legend(title="Sample")
+ax.axhline(0, color="black", linewidth=1)
+ax.grid(axis="y", linestyle="--", alpha=0.7)
+ax.legend(title=False, loc="upper right")
+ax.grid(False)

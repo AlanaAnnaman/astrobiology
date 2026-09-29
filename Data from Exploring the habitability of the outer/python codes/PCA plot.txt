@@ -1,0 +1,36 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+df = pd.read_excel()
+data = df.T
+
+data["condition"] =["Exposed" if "Exposed" in sample else "Repaired" for sample in data.index]
+
+conditions = data.pop("condition")
+
+scaler = StandardScaler()
+data_scaled = scaler.fit_transform(data)
+
+pca = PCA(n_components=2)
+principal_components = pca.fit_transform(data_scaled)
+
+pca_df = pd.DataFrame(principal_components, columns=["PC1", "PC2"], index=data.index)
+pca_df["condition"] = conditions.values
+
+explained_var = pca.explained_variance_ratio_ * 100
+
+plt.figure(figsize=(10, 8))
+sns.scatterplot(x="PC1", y="PC2", hue="condition", data=pca_df, s=120, palette="Set1")
+
+plt.xlabel(f"PC1: {explained_var[0]:.1f}%variance", fontsize=12)
+plt.ylabel(f"PC2: {explained_var[0]:.1f}%variance", fontsize=12)
+
+plt.axhline(0, linestyle="--", color="grey", linewidth=0.7)
+plt.axvline(0, linestyle="--", color="grey", linewidth=0.7)
+
+plt.grid(alpha=0.3)
+plt.tight_layout()
